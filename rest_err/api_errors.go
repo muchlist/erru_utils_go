@@ -3,6 +3,7 @@ package rest_err
 import (
 	"encoding/json"
 	"errors"
+	"fmt"
 	"net/http"
 )
 
@@ -11,6 +12,7 @@ type APIError interface {
 	Message() string
 	Status() int
 	Error() string
+	Causes() []interface{}
 }
 
 type apiError struct {
@@ -32,11 +34,22 @@ func (e *apiError) Error() string {
 	return e.Anerror
 }
 
-//NewAPIError membuat error yang belum terdifinisikan
-func NewAPIError(statusCode int, message string) APIError {
+func (e *apiError) String() string {
+	return fmt.Sprintf("message: %s - status: %d - error: %s - causes: [ %v ]",
+		e.Message(), e.Status(), e.Anerror, e.ACauses)
+}
+
+func (e *apiError) Causes() []interface{} {
+	return e.ACauses
+}
+
+//NewAPIError membuat api error baru dengan mendifinisikan semua isinyas
+func NewAPIError(message string, statusCode int, err string, causes []interface{}) APIError {
 	return &apiError{
 		AStatus:  statusCode,
 		AMessage: message,
+		Anerror:  err,
+		ACauses:  causes,
 	}
 }
 
@@ -50,11 +63,21 @@ func NewAPIErrorFromBytes(body []byte) (APIError, error) {
 	return &result, nil
 }
 
-//NewNotFoundError membuat error tidak ditemukan
+//NewNotFoundError membuat api error ketika objek yang dicari tidak ditemukan
 func NewNotFoundError(message string) APIError {
 	return &apiError{
 		AStatus:  http.StatusNotFound,
 		AMessage: message,
+		Anerror:  "not_found",
+	}
+}
+
+//NewUnauthorizedError membuat api error user yang tidak diijinkan masuk
+func NewUnauthorizedError(message string) APIError {
+	return &apiError{
+		AStatus:  http.StatusUnauthorized,
+		AMessage: message,
+		Anerror:  "unauthorized",
 	}
 }
 
@@ -77,5 +100,6 @@ func NewBadRequestError(message string) APIError {
 	return &apiError{
 		AStatus:  http.StatusBadRequest,
 		AMessage: message,
+		Anerror:  "bad_request",
 	}
 }
