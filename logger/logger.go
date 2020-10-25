@@ -46,7 +46,9 @@ func init() {
 	}
 }
 
-//GetLogger digunakan untuk setLogger, biasanya ada di database logger
+//GetLogger digunakan untuk keperluan setLogger di dependency lain,
+//misalnya ada di database logger, dia memerlukan logger yang menerapkan interface
+//tertentu
 func GetLogger() logger {
 	return log
 }
