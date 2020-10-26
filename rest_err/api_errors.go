@@ -31,10 +31,6 @@ func (e *apiError) Message() string {
 }
 
 func (e *apiError) Error() string {
-	return e.Anerror
-}
-
-func (e *apiError) String() string {
 	return fmt.Sprintf("message: %s - status: %d - error: %s - causes: [ %v ]",
 		e.Message(), e.Status(), e.Anerror, e.ACauses)
 }
