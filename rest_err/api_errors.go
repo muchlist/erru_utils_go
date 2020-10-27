@@ -83,7 +83,7 @@ func NewInternalServerError(message string, err error) APIError {
 		AStatus:  http.StatusInternalServerError,
 		AMessage: message,
 		Anerror:  "internal_server_error",
-		ACauses:  []interface{}{err.Error()},
+		ACauses:  []interface{}{},
 	}
 	if err != nil {
 		result.ACauses = append(result.ACauses, err.Error())
