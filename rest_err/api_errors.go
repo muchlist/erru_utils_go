@@ -65,6 +65,7 @@ func NewNotFoundError(message string) APIError {
 		AStatus:  http.StatusNotFound,
 		AMessage: message,
 		Anerror:  "not_found",
+		ACauses:  []interface{}{},
 	}
 }
 
@@ -74,6 +75,7 @@ func NewUnauthorizedError(message string) APIError {
 		AStatus:  http.StatusUnauthorized,
 		AMessage: message,
 		Anerror:  "unauthorized",
+		ACauses:  []interface{}{},
 	}
 }
 
@@ -97,5 +99,6 @@ func NewBadRequestError(message string) APIError {
 		AStatus:  http.StatusBadRequest,
 		AMessage: message,
 		Anerror:  "bad_request",
+		ACauses:  []interface{}{},
 	}
 }
